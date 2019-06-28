@@ -14,7 +14,7 @@ $data=_HttpRequest(2,$linktrangbao,'','','','Connection: keep-alive|Upgrade-Inse
 			EndIf
 			$kiemtra = StringRegExp($content,'<(.*?)>',1)
 			$xoabo = '<' & $kiemtra[0] & '>'
-			$content = StringReplace($content,$kiemtra[0],'')
+			$content = StringReplace($content,$xoabo,'')
 			if StringInStr($content,'<') = 0 Then
 				ExitLoop
 			EndIf
