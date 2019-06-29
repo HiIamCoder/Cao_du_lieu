@@ -1,0 +1,50 @@
+#Ban chinh thuc
+#----------------------------------------------------------------------------
+import requests
+import re
+from bs4 import BeautifulSoup
+from google.colab import files
+luulink = []
+
+f = open("phunutoday_content.txt", "w+")
+f.write('')
+f.close()
+
+def getcontent(link):
+  chuoi = ''
+  r = requests.get(link)
+  html_soup = BeautifulSoup(r.text, 'html.parser')
+  content = html_soup.find_all('div', class_ = 'content_detail_text')
+  for x in content:
+    chuoi = chuoi + '' + str(x)
+  chuoi = re.sub('(?=<).+?(?<=>)','',chuoi)
+  f = open("phunutoday_content.txt", "a")
+  f.write(chuoi)
+  f.close()
+
+  
+  
+def getlink(trang):
+  url = 'https://phunutoday.vn/lam-me/p'+ trang
+  r = requests.get(url)
+  page_html = r.content
+  #chuyen html 2 string
+  page_html = page_html.decode('UTF-8')
+  newlink = re.findall('(?=https://phunutoday.vn).+?(?<=.html)',page_html)
+  for link in newlink:
+      if link not in luulink:
+        luulink.append(link)
+
+i=2
+while i<100:
+  sotrang = str(i)
+  getlink(sotrang)
+  i+=1
+a = 0  
+for xl in luulink: 
+  getcontent(luulink[a])
+  a += 1
+f = open("phunutoday_content.txt", "r")
+print(f.read())
+print(len(luulink))
+files.download('phunutoday_content.txt')
