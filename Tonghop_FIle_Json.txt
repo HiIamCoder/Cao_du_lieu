@@ -1,0 +1,34 @@
+#-----------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------
+
+#link trên máy tính : C:\Users\Admin\Desktop\VAML\_HttpRequest (1)\_HttpRequest (1)\Cào v? ....
+#c?n x?a l?i dúng d?ng :
+#E:/DataSet/facebook-huyhuynh9595/messages/inbox/
+#Huong dan: Path = ' link folder '
+#Tool s? tìm t?ng ngõ ngách trong folder d? tìm file message_1.json
+#Sau dó n?i l?i thành file E:/AllinOne.txt
+#Mn k th?o làm Giao di?n. Mn ch?u khó làm b?ng tay nhé vào code nhé.
+
+import os
+import re
+import json
+import fnmatch
+
+path = 'E:/DataSet/facebook-huyhuynh9595/messages/inbox/'
+     
+tonghop =  open('E:/AllinOne2.txt','a')
+os.chdir(path)
+for dirpath, dirname, filenames in os.walk(path):
+    for file in os.listdir(dirpath):
+        if fnmatch.fnmatch(file,'*.json'):
+            f = open(dirpath+'/'+file,'r')
+            contents = re.findall('(?="sender_name": ").+?(?<=,)|(?="content").+?(?<=,)', f.read())
+            for content in contents:
+                data =  re.sub('"|,','',content)  
+                data = '"' + data +  '"'  
+                if data != '""':   
+                    tonghop.write(data + '\n')
+                                       
+            f.close()
+tonghop.close()
